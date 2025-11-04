@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Instalações Elétricas</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Sistema de Instalações Elétricas</h1>
+        <p>Adicione os cômodos e gere automaticamente a Tabela QDG</p>
+    </header>
+
+    <main>
+        <section id="form-section">
+            <h2>Adicionar Cômodo</h2>
+            <div class="form-grid">
+                <input type="text" id="nome" placeholder="Nome do cômodo" required>
+                <select id="tipoArea">
+                    <option value="seca">Área seca</option>
+                    <option value="molhada">Área molhada</option>
+                </select>
+                <input type="number" id="comprimento" placeholder="Comprimento (m)" step="0.1" required>
+                <input type="number" id="largura" placeholder="Largura (m)" step="0.1" required>
+                <button id="addComodo">Adicionar</button>
+            </div>
+        </section>
+
+        <section id="comodos-list">
+            <h2>Lista de Cômodos</h2>
+            <table id="tabelaComodos">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Tipo</th>
+                        <th>Comprimento (m)</th>
+                        <th>Largura (m)</th>
+                        <th>Área (m²)</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </section>
+
+        <section id="qdg-section">
+            <button id="gerarQDG">Gerar Tabela QDG</button>
+            <div id="resultado"></div>
+        </section>
+    </main>
+
+    <footer>
+        <p>Desenvolvido para cálculo de instalações elétricas residenciais (NBR 5410)</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
