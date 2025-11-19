@@ -1,7 +1,7 @@
 // src/controllers/comodos.controller.js
 
 const Comodo = require('../models/Comodo');
-const GeradorQDGService = require('../functions/geradorQDG.service');
+const GeradorQDGService = require('../netlify/functions/geradorQDG');
 
 class ComodosController {
     static gerarTabela(req, res) {
