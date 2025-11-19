@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema de Instalações Elétricas</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <header>
         <h1>Sistema de Instalações Elétricas</h1>
@@ -45,8 +47,15 @@
 
         <section id="qdg-section">
             <button id="gerarQDG">Gerar Tabela QDG</button>
+
             <div id="resultado"></div>
+
+            <div id="acoesQDG" style="display:none; margin-top:20px;">
+                <button id="baixarCSV">Baixar Tabela (CSV)</button>
+                <button id="resetarTudo">Resetar Tudo</button>
+            </div>
         </section>
+
     </main>
 
     <footer>
@@ -55,4 +64,5 @@
 
     <script src="script.js"></script>
 </body>
+
 </html>
