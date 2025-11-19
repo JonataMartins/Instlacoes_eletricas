@@ -1,6 +1,6 @@
 // src/services/geradorQDG.service.js
 
-const Circuito = require('../models/Circuito');
+const Circuito = require('../../scr/models/Circuito');
 
 class GeradorQDGService {
     constructor(comodos) {
