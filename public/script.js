@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
   console.log("DOMContentLoaded - script carregado");
 
   let comodos = [];
+  let listaTUE = [];
 
   // helpers
   function $(id) { return document.getElementById(id); }
@@ -38,43 +39,58 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Função para atualizar tabela de cômodos
   function atualizarTabelaComodos() {
-    const tbody = document.querySelector('#tabelaComodos tbody');
-    if (!tbody) {
-      console.error("tbody da tabelaComodos não encontrado");
-      return;
-    }
-    tbody.innerHTML = '';
+  const tbody = document.querySelector('#tabelaComodos tbody');
+  if (!tbody) return;
 
+  tbody.innerHTML = '';
+
+  comodos.forEach(c => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${c.nome}</td>
+      <td>${c.tipoArea}</td>
+      <td>${c.tensao}</td>
+      <td>${c.comprimento}</td>
+      <td>${c.largura}</td>
+      <td>${c.area}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  // ✅ Atualiza o select de TUE
+  const selectTUE = $('tue-comodo');
+  if (selectTUE) {
+    selectTUE.innerHTML = `<option value="">Selecione o cômodo</option>`;
     comodos.forEach(c => {
-      const tr = document.createElement('tr');
-      tr.innerHTML = `
-        <td>${c.nome}</td>
-        <td>${c.tipoArea}</td>
-        <td>${c.comprimento}</td>
-        <td>${c.largura}</td>
-        <td>${c.area}</td>
-      `;
-      tbody.appendChild(tr);
+      const opt = document.createElement('option');
+      opt.value = c.nome;
+      opt.textContent = c.nome;
+      selectTUE.appendChild(opt);
     });
   }
+}
 
   // Evento adicionar cômodo
   if (btnAdd) {
     btnAdd.addEventListener('click', (ev) => {
       ev.preventDefault();
       console.log("addComodo clicado");
+
       const nome = $('nome').value.trim();
       const tipoArea = $('tipoArea').value;
+      const tensao = $('tensao').value;
       const comprimento = parseFloat($('comprimento').value);
       const largura = parseFloat($('largura').value);
 
-      if (!nome || !comprimento || !largura || isNaN(comprimento) || isNaN(largura)) {
+      console.log(tensao);
+
+      if (!nome || !comprimento || !tensao || !largura || isNaN(comprimento) || isNaN(largura)) {
         alert('Preencha todos os campos corretamente.');
         return;
       }
 
       const area = (comprimento * largura).toFixed(2);
-      comodos.push({ nome, tipoArea, comprimento, largura, area });
+      comodos.push({ nome, tipoArea, tensao, comprimento, largura, area });
       atualizarTabelaComodos();
 
       $('nome').value = '';
@@ -82,6 +98,55 @@ document.addEventListener('DOMContentLoaded', () => {
       $('largura').value = '';
     });
   }
+
+  // ---------------------- TUE (Tomadas de Uso Específico) ----------------------
+
+  const btnAddTUE = $('addTUE');
+
+  function atualizarTabelaTUE() {
+  const tbody = document.querySelector('#tabelaTUE tbody');
+  if (!tbody) return;
+
+  tbody.innerHTML = '';
+
+  listaTUE.forEach(tue => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${tue.nome}</td>
+      <td>${tue.nomeComodo}</td>
+      <td>${tue.tensao} V</td>
+      <td>${tue.potencia} VA</td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+if (btnAddTUE) {
+  btnAddTUE.addEventListener('click', (ev) => {
+    ev.preventDefault();
+
+    const nome = $('tue-nome').value.trim();
+    const nomeComodo = $('tue-comodo').value;
+    const potencia = Number($('tue-potencia').value);
+
+    if (!nome || !nomeComodo || potencia <= 0 || isNaN(potencia)) {
+      alert("Preencha corretamente a TUE.");
+      return;
+    }
+
+    // ✅ buscar tensão do cômodo selecionado
+    const comodoRef = comodos.find(c => c.nome === nomeComodo);
+    const tensao = comodoRef ? Number(comodoRef.tensao) : 127;
+
+    listaTUE.push({ nome, nomeComodo, tensao, potencia });
+
+    atualizarTabelaTUE();
+
+    $('tue-nome').value = '';
+    $('tue-potencia').value = '';
+    $('tue-comodo').value = '';
+  });
+}
 
   // Função que renderiza tabela QDG no DOM (garante id tabelaQDG)
   function mostrarTabelaQDG(tabela) {
@@ -136,7 +201,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnReset = $('resetarTudo');
 
     if (btnCSV) {
-      btnCSV.replaceWith(btnCSV.cloneNode(true)); // remove listeners antigos
+      btnCSV.replaceWith(btnCSV.cloneNode(true));
       $('baixarCSV').addEventListener('click', baixarCSV);
     } else {
       console.warn("Botão #baixarCSV não encontrado após gerar tabela");
@@ -207,7 +272,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const resposta = await fetch('/comodos/gerarQDG', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ comodos })
+          body: JSON.stringify({ comodos, tues: listaTUE })
         });
 
         console.log("Requisição /comodos/gerarQDG status:", resposta.status);
@@ -226,14 +291,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Caso alguém queira baixar/resetar sem gerar (apenas para debugging)
+
   const acoesDebug = $('acoesQDG');
   if (acoesDebug) {
-    // attach if exist
     const btnCSV = $('baixarCSV');
     if (btnCSV) btnCSV.addEventListener('click', baixarCSV);
     const btnReset = $('resetarTudo');
     if (btnReset) btnReset.addEventListener('click', resetarTudo);
   }
 
-}); // end DOMContentLoaded
+});

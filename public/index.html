@@ -17,25 +17,53 @@
     <main>
         <section id="form-section">
             <h2>Adicionar Cômodo</h2>
-            <div class="form-grid">
-                <input type="text" id="nome" placeholder="Nome do cômodo" required>
-                <select id="tipoArea">
-                    <option value="seca">Área seca</option>
-                    <option value="molhada">Área molhada</option>
-                </select>
-                <input type="number" id="comprimento" placeholder="Comprimento (m)" step="0.1" required>
-                <input type="number" id="largura" placeholder="Largura (m)" step="0.1" required>
-                <button id="addComodo">Adicionar</button>
+            <input type="text" id="nome" placeholder="Nome do cômodo" required>
+            <select id="tipoArea">
+                <option value="seca">Área seca</option>
+                <option value="molhada">Área molhada</option>
+            </select>
+            <select id="tensao">
+                <option value="127">127 V</option>
+                <option value="220">220 V</option>
+            </select>
+            <input type="number" id="comprimento" placeholder="Comprimento (m)" step="0.1" required>
+            <input type="number" id="largura" placeholder="Largura (m)" step="0.1" required>
+            <button id="addComodo">Adicionar</button>
             </div>
         </section>
 
-        <section id="comodos-list">
-            <h2>Lista de Cômodos</h2>
+        <!-- 2) ADICIONAR TUE -->
+        <section id="tue-section" style="margin-top:24px;">
+            <h2>Adicionar TUE (Tomadas de Uso Específico / Equipamentos dedicados)</h2>
+
+            <div class="form-grid-eq">
+
+                <!-- nome do equipamento -->
+                <input type="text" id="tue-nome" placeholder="Nome do equipamento (ex: Micro-ondas)">
+
+                <!-- selecionar cômodo existente -->
+                <select id="tue-comodo">
+                    <option value="">Selecione o cômodo</option>
+                </select>
+
+                <!-- potência -->
+                <input type="number" id="tue-potencia" placeholder="Potência (VA)" step="1">
+
+                <button id="addTUE">Adicionar TUE</button>
+            </div>
+        </section>
+
+
+        <!-- 3) TABELA DE CÔMODOS ADICIONADOS -->
+        <section id="comodos-list" style="margin-top:24px;">
+            <h2>Cômodos Adicionados</h2>
+
             <table id="tabelaComodos">
                 <thead>
                     <tr>
                         <th>Nome</th>
                         <th>Tipo</th>
+                        <th>Tensão (V)</th>
                         <th>Comprimento (m)</th>
                         <th>Largura (m)</th>
                         <th>Área (m²)</th>
@@ -45,11 +73,31 @@
             </table>
         </section>
 
-        <section id="qdg-section">
+
+        <table id="tabelaTUE">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Cômodo</th>
+                    <th>Tensão (V)</th>
+                    <th>Potência (VA)</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+
+        <!-- 5) BOTÃO PARA GERAR QDG -->
+        <section id="qdg-section" style="margin-top:32px;">
             <button id="gerarQDG">Gerar Tabela QDG</button>
 
+            <!-- 6) RESULTADO DOS CÔMODOS -->
             <div id="resultado"></div>
 
+            <!-- 7) RESULTADO DOS TUE -->
+            <div id="resultadoTUE" style="margin-top:24px;"></div>
+
+            <!-- ações -->
             <div id="acoesQDG" style="display:none; margin-top:20px;">
                 <button id="baixarCSV">Baixar Tabela (CSV)</button>
                 <button id="resetarTudo">Resetar Tudo</button>

@@ -1,9 +1,9 @@
-// src/models/Comodo.js
-
 class Comodo {
-    constructor(nome, tipoArea, comprimento, largura) {
-        this.nome = nome;                 // Ex: "Cozinha"
-        this.tipoArea = tipoArea;         // "seca" ou "molhada"
+    constructor(nome, tipoArea, tensao, comprimento, largura) {
+        this.nome = nome;
+        this.tipoArea = tipoArea === 'molhada' ? 'molhada' : 'seca';
+        this.tensao = parseInt(tensao);
+
         this.comprimento = parseFloat(comprimento);
         this.largura = parseFloat(largura);
 
@@ -13,20 +13,18 @@ class Comodo {
     }
 
     calcularArea() {
-        return (this.comprimento * this.largura).toFixed(2);
+        return parseFloat((this.comprimento * this.largura).toFixed(2));
     }
 
+    // NBR 5410 — iluminação mínima
     estimarPotencia() {
-        // Baseado em NBR 5410 (valores aproximados)
-        // Áreas secas: 100 VA por 4 m², mínimo 100 VA
-        // Áreas molhadas: 600 VA mínimo
-        if (this.tipoArea === 'molhada') return 600;
+        if (this.tipoArea === 'molhada') return 600; // regra da norma
         const potencia = Math.ceil(this.area / 4) * 100;
         return potencia < 100 ? 100 : potencia;
     }
 
+    // NBR 5410 — tomadas mínimas por m²
     estimarTomadas() {
-        // Simplificação: 1 tomada a cada 5 m² (mínimo 1)
         return Math.max(1, Math.ceil(this.area / 5));
     }
 }

@@ -1,30 +1,44 @@
 // src/controllers/comodos.controller.js
 
 const Comodo = require('../models/Comodo');
+const TUE = require('../models/TUE');
 const GeradorQDGService = require('../services/geradorQDG.service');
 
 class ComodosController {
     static gerarTabela(req, res) {
         try {
-            const { comodos } = req.body;
+            const { comodos, tues } = req.body;
 
+            // validação dos cômodos
             if (!comodos || !Array.isArray(comodos)) {
                 return res.status(400).json({ erro: 'Lista de cômodos inválida' });
             }
 
-            // Cria os objetos de cômodo
+            // cria os objetos de cômodo
             const listaComodos = comodos.map(c => new Comodo(
                 c.nome,
                 c.tipoArea,
+                c.tensao,
                 c.comprimento,
                 c.largura
             ));
 
-            // Gera a tabela QDG
-            const gerador = new GeradorQDGService(listaComodos);
+            const listaTUEs = Array.isArray(tues)
+                ? tues.map(t => new TUE(
+                    t.nome,         
+                    t.nomeComodo,       
+                    t.potencia,
+                    t.tensao
+                ))
+                : [];
+
+
+            // gera a tabela QDG incluindo TUEs
+            const gerador = new GeradorQDGService(listaComodos, listaTUEs);
             const tabela = gerador.gerarTabela();
 
             return res.json({ tabela });
+
         } catch (erro) {
             console.error(erro);
             res.status(500).json({ erro: 'Erro ao gerar a tabela QDG' });
