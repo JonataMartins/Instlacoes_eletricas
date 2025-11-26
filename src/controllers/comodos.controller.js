@@ -25,10 +25,11 @@ class ComodosController {
 
             const listaTUEs = Array.isArray(tues)
                 ? tues.map(t => new TUE(
-                    t.nome,         
-                    t.nomeComodo,       
+                    t.nome,
+                    t.nomeComodo,
                     t.potencia,
-                    t.tensao
+                    t.tensaoT,
+                    t.ambiente
                 ))
                 : [];
 

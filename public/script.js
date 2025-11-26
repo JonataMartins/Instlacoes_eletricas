@@ -39,14 +39,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Função para atualizar tabela de cômodos
   function atualizarTabelaComodos() {
-  const tbody = document.querySelector('#tabelaComodos tbody');
-  if (!tbody) return;
+    const tbody = document.querySelector('#tabelaComodos tbody');
+    if (!tbody) return;
 
-  tbody.innerHTML = '';
+    tbody.innerHTML = '';
 
-  comodos.forEach(c => {
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
+    comodos.forEach(c => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
       <td>${c.nome}</td>
       <td>${c.tipoArea}</td>
       <td>${c.tensao}</td>
@@ -54,21 +54,21 @@ document.addEventListener('DOMContentLoaded', () => {
       <td>${c.largura}</td>
       <td>${c.area}</td>
     `;
-    tbody.appendChild(tr);
-  });
-
-  // ✅ Atualiza o select de TUE
-  const selectTUE = $('tue-comodo');
-  if (selectTUE) {
-    selectTUE.innerHTML = `<option value="">Selecione o cômodo</option>`;
-    comodos.forEach(c => {
-      const opt = document.createElement('option');
-      opt.value = c.nome;
-      opt.textContent = c.nome;
-      selectTUE.appendChild(opt);
+      tbody.appendChild(tr);
     });
+
+    // ✅ Atualiza o select de TUE
+    const selectTUE = $('tue-comodo');
+    if (selectTUE) {
+      selectTUE.innerHTML = `<option value="">Selecione o cômodo</option>`;
+      comodos.forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c.nome;
+        opt.textContent = c.nome;
+        selectTUE.appendChild(opt);
+      });
+    }
   }
-}
 
   // Evento adicionar cômodo
   if (btnAdd) {
@@ -104,49 +104,56 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnAddTUE = $('addTUE');
 
   function atualizarTabelaTUE() {
-  const tbody = document.querySelector('#tabelaTUE tbody');
-  if (!tbody) return;
+    const tbody = document.querySelector('#tabelaTUE tbody');
+    if (!tbody) return;
 
-  tbody.innerHTML = '';
+    tbody.innerHTML = '';
 
-  listaTUE.forEach(tue => {
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
+    listaTUE.forEach(tue => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
       <td>${tue.nome}</td>
       <td>${tue.nomeComodo}</td>
-      <td>${tue.tensao} V</td>
+      <td>${tue.tensaoT} V</td>
       <td>${tue.potencia} VA</td>
     `;
-    tbody.appendChild(tr);
-  });
-}
+      tbody.appendChild(tr);
+    });
+  }
 
-if (btnAddTUE) {
-  btnAddTUE.addEventListener('click', (ev) => {
-    ev.preventDefault();
+  if (btnAddTUE) {
+    btnAddTUE.addEventListener('click', (ev) => {
+      ev.preventDefault();
 
-    const nome = $('tue-nome').value.trim();
-    const nomeComodo = $('tue-comodo').value;
-    const potencia = Number($('tue-potencia').value);
+      const nome = $('tue-nome').value.trim();
+      const nomeComodo = $('tue-comodo').value;
+      const potencia = Number($('tue-potencia').value);
 
-    if (!nome || !nomeComodo || potencia <= 0 || isNaN(potencia)) {
-      alert("Preencha corretamente a TUE.");
-      return;
-    }
+      if (!nome || !nomeComodo || potencia <= 0 || isNaN(potencia)) {
+        alert("Preencha corretamente a TUE.");
+        return;
+      }
 
-    // ✅ buscar tensão do cômodo selecionado
-    const comodoRef = comodos.find(c => c.nome === nomeComodo);
-    const tensao = comodoRef ? Number(comodoRef.tensao) : 127;
+      const tensaoT = Number($('tue-tensao').value);
 
-    listaTUE.push({ nome, nomeComodo, tensao, potencia });
+      const comodoRef = comodos.find(c => c.nome === nomeComodo);
+      const ambiente = comodoRef ? comodoRef.tipoArea : 'seca';
 
-    atualizarTabelaTUE();
+      listaTUE.push({
+        nome,
+        nomeComodo,
+        tensaoT,
+        potencia,
+        ambiente
+      });
 
-    $('tue-nome').value = '';
-    $('tue-potencia').value = '';
-    $('tue-comodo').value = '';
-  });
-}
+      atualizarTabelaTUE();
+
+      $('tue-nome').value = '';
+      $('tue-potencia').value = '';
+      $('tue-comodo').value = '';
+    });
+  }
 
   // Função que renderiza tabela QDG no DOM (garante id tabelaQDG)
   function mostrarTabelaQDG(tabela) {
@@ -171,7 +178,6 @@ if (btnAddTUE) {
             <th>Disjuntor</th>
             <th>Seção</th>
             <th>DR</th>
-            <th>Barramento</th>
           </tr>
         </thead>
         <tbody>
@@ -185,7 +191,6 @@ if (btnAddTUE) {
               <td>${c.Disjuntor}</td>
               <td>${c.Seção}</td>
               <td>${c.DR}</td>
-              <td>${c.Barramento}</td>
             </tr>
           `).join('')}
         </tbody>

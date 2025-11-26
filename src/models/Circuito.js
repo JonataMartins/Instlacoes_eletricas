@@ -1,5 +1,5 @@
 class Circuito {
-    constructor(numero, descricao, tensao, potencia, corrente, disjuntor, secao, dr, barramento) {
+    constructor(numero, descricao, tensao, potencia, corrente, disjuntor, secao, dr) {
         this.numero = numero;       // Ex: 1
         this.descricao = descricao; // Ex: "Iluminação Sala"
         this.tensao = tensao;       // Ex: 127 ou 220
@@ -8,7 +8,6 @@ class Circuito {
         this.disjuntor = disjuntor; // A
         this.secao = secao;         // mm²
         this.dr = dr || '-';        // Ex: "30 mA" ou "-"
-        this.barramento = barramento; // "A", "B" ou "C"
     }
 
     static calcularCorrente(potencia, tensao) {

@@ -7,7 +7,6 @@ class GeradorQDGService {
         this.comodos = comodos;
         this.tues = tues;
         this.circuitos = [];
-        this.barramentos = ['A', 'B', 'C'];
     }
 
     gerar() {
@@ -22,7 +21,6 @@ class GeradorQDGService {
             const correnteIluminacao = Circuito.calcularCorrente(comodo.potencia, comodo.tensao);
             const disjIluminacao = Circuito.sugerirDisjuntor(correnteIluminacao);
             const secaoIluminacao = Circuito.sugerirSecao(correnteIluminacao, comodo.potencia, comodo.tensao);
-            const barramentoIluminacao = this.sortearBarramento();
 
             this.circuitos.push(new Circuito(
                 numero++,
@@ -33,7 +31,6 @@ class GeradorQDGService {
                 disjIluminacao,
                 secaoIluminacao,
                 '-',
-                barramentoIluminacao
             ));
 
             // Circuito de tomadas (TUG)
@@ -44,8 +41,6 @@ class GeradorQDGService {
             let secaoTomadas = Circuito.sugerirSecao(correnteTomadas, potenciaTomadas, comodo.tensao);
             if (secaoTomadas < 2.5) secaoTomadas = 2.5;
 
-            const barramentoTomadas = this.sortearBarramento();
-
             this.circuitos.push(new Circuito(
                 numero++,
                 `Tomadas - ${comodo.nome}`,
@@ -55,7 +50,6 @@ class GeradorQDGService {
                 disjTomadas,
                 secaoTomadas,
                 comodo.tipoArea === 'molhada' ? '30 mA' : '-',
-                barramentoTomadas
             ));
         }
 
@@ -64,7 +58,9 @@ class GeradorQDGService {
         // ----------------------------
         for (const tue of this.tues) {
 
-            const tensao = tue.tensao || 127; // default caso não venha do front
+            console.log(this.tues)
+            // usar o campo correto vindo do modelo
+            const tensao = tue.tensao || 127;
 
             const corrente = Circuito.calcularCorrente(tue.potencia, tensao);
             const disjuntor = Circuito.sugerirDisjuntor(corrente);
@@ -72,10 +68,8 @@ class GeradorQDGService {
             let secao = Circuito.sugerirSecao(corrente, tue.potencia, tensao);
             if (secao < 2.5) secao = 2.5;
 
-            const barramento = this.sortearBarramento();
-
-            // DR conforme regra simplificada solicitada
-            const dr = tue.ambiente === 'molhado' ? '30 mA' : '-';
+            // DR conforme regra simplificada
+            const dr = tue.ambiente === 'molhada' ? '30 mA' : '-';
 
             this.circuitos.push(new Circuito(
                 numero++,
@@ -85,18 +79,12 @@ class GeradorQDGService {
                 corrente,
                 disjuntor,
                 secao,
-                dr,
-                barramento
+                dr
             ));
         }
         return this.circuitos;
     }
 
-    sortearBarramento() {
-        const b = this.barramentos.shift();
-        this.barramentos.push(b);
-        return b;
-    }
 
     gerarTabela() {
         const lista = this.gerar();
@@ -110,7 +98,6 @@ class GeradorQDGService {
                 Disjuntor: `${c.disjuntor} A`,
                 Seção: `${c.secao} mm²`,
                 DR: c.dr,
-                Barramento: c.barramento
             };
         });
 

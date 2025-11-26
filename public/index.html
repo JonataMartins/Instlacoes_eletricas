@@ -38,19 +38,22 @@
 
             <div class="form-grid-eq">
 
-                <!-- nome do equipamento -->
                 <input type="text" id="tue-nome" placeholder="Nome do equipamento (ex: Micro-ondas)">
 
-                <!-- selecionar cômodo existente -->
                 <select id="tue-comodo">
                     <option value="">Selecione o cômodo</option>
                 </select>
 
-                <!-- potência -->
                 <input type="number" id="tue-potencia" placeholder="Potência (VA)" step="1">
+
+                <select id="tue-tensao">
+                    <option value="127">127 V</option>
+                    <option value="220">220 V</option>
+                </select>
 
                 <button id="addTUE">Adicionar TUE</button>
             </div>
+
         </section>
 
 
