@@ -1,7 +1,6 @@
-html, body {
-    height: 100%;
+html {
+    font-size: 16px; /* base para rem */
 }
-
 
 body {
     font-family: Arial, sans-serif;
@@ -11,38 +10,47 @@ body {
     color: #333;
     display: flex;
     flex-direction: column;
+    height: 100%;
 }
 
 header {
     background: #004aad;
     color: white;
     text-align: center;
-    padding: 20px;
+    padding: 1.5rem;
+}
+
+header h1 {
+    font-size: 1.7rem;
 }
 
 main {
-    padding: 20px;
-    max-width: 900px;
+    padding: 1.5rem;
+    max-width: 60rem;
     margin: auto;
-    flex:1;
+    flex: 1;
 }
 
 h2 {
-    margin-top: 40px;
+    margin-top: 2rem;
     color: #004aad;
+    font-size: 1.4rem;
 }
 
 .form-grid {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-    gap: 10px;
-    margin-top: 10px;
+    gap: 0.6rem;
+    margin-top: 0.6rem;
 }
 
-input, select, button {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
+input,
+select,
+button {
+    padding: 0.7rem;
+    border: 0.07rem solid #ccc;
+    border-radius: 0.4rem;
+    font-size: 1rem;
 }
 
 button {
@@ -59,27 +67,91 @@ button:hover {
 table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 15px;
+    margin-top: 1rem;
+    font-size: 0.95rem;
 }
 
-th, td {
-    padding: 10px;
-    border: 1px solid #ccc;
+th,
+td {
+    padding: 0.7rem;
+    border: 0.07rem solid #ccc;
     text-align: center;
 }
 
 #resultado table {
-    margin-top: 25px;
+    margin-top: 1.5rem;
 }
 
 footer {
     text-align: center;
-    padding: 15px;
+    padding: 1rem;
     background: #004aad;
     color: white;
-    margin-top: 50px;
+    margin-top: 3rem;
 }
 
-#gerarQDG{
-    margin-top: 1em;
+#gerarQDG {
+    margin-top: 1rem;
+}
+
+/* ================================
+        RESPONSIVIDADE (MOBILE)
+   ================================ */
+
+@media (max-width: 768px) {
+
+    html {
+        font-size: 15px; /* reduzir toda a escala suavemente */
+    }
+
+    .form-grid,
+    .form-grid-eq {
+        grid-template-columns: 1fr !important; /* tudo em coluna */
+        gap: 0.8rem;
+    }
+
+    input,
+    select,
+    button {
+        width: 100%;
+        font-size: 1rem;
+        padding: 0.8rem;
+    }
+
+    table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+        font-size: 0.9rem;
+    }
+
+    #acoesQDG button {
+        width: 100%;
+        margin-bottom: 0.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+
+    html {
+        font-size: 14px; /* ainda menor para telas realmente pequenas */
+    }
+
+    header h1 {
+        font-size: 1.4rem;
+    }
+
+    h2 {
+        font-size: 1.2rem;
+    }
+
+    button {
+        padding: 1rem;
+        font-size: 1rem;
+    }
+
+    header,
+    footer {
+        padding: 1rem;
+    }
 }
