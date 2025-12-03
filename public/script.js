@@ -82,8 +82,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const comprimento = parseFloat($('comprimento').value);
       const largura = parseFloat($('largura').value);
 
-      console.log(tensao);
-
       if (!nome || !comprimento || !tensao || !largura || isNaN(comprimento) || isNaN(largura)) {
         alert('Preencha todos os campos corretamente.');
         return;
@@ -164,6 +162,18 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
+    let somaPotencia = 0;
+    let somaCorrente = 0;
+
+    console.log(tabela);
+
+    tabela.forEach(c => {
+      
+      somaPotencia += Number(c.Potência) || 0;
+      somaCorrente += Number(c.Corrente) || 0;
+    });
+
+
     // Gera HTML com id na tabela
     div.innerHTML = `
       <h2>Tabela QDG Gerada</h2>
@@ -177,7 +187,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <th>Corrente</th>
             <th>Disjuntor</th>
             <th>Seção</th>
-            <th>DR</th>
+            
           </tr>
         </thead>
         <tbody>
@@ -185,14 +195,26 @@ document.addEventListener('DOMContentLoaded', () => {
             <tr>
               <td>${c.Circuito}</td>
               <td>${c.Descrição}</td>
-              <td>${c.Tensão}</td>
-              <td>${c.Potência}</td>
-              <td>${c.Corrente}</td>
-              <td>${c.Disjuntor}</td>
-              <td>${c.Seção}</td>
-              <td>${c.DR}</td>
+              <td>${c.Tensão} V </td>
+              <td>${c.Potência} VA </td>
+              <td>${c.Corrente} A </td>
+              <td>${c.Disjuntor} A </td>
+              <td>${c.Seção} mm²</td>
+              
             </tr>
           `).join('')}
+
+          <tr>
+              <td>Total</td>
+              <td></td>
+              <td></td>
+              <td>${somaPotencia} VA</td>
+              <td>${somaCorrente} A</td>
+              <td></td>
+              <td></td>
+              
+            </tr>
+
         </tbody>
       </table>
     `;

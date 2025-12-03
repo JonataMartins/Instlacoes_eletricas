@@ -57,8 +57,6 @@ class GeradorQDGService {
         // ADIÇÃO DAS TUEs (AJUSTADO)
         // ----------------------------
         for (const tue of this.tues) {
-
-            console.log(this.tues)
             // usar o campo correto vindo do modelo
             const tensao = tue.tensao || 127;
 
@@ -92,11 +90,11 @@ class GeradorQDGService {
             return {
                 Circuito: c.numero,
                 Descrição: c.descricao,
-                Tensão: `${c.tensao} V`,
-                Potência: `${c.potencia} VA`,
-                Corrente: `${c.corrente} A`,
-                Disjuntor: `${c.disjuntor} A`,
-                Seção: `${c.secao} mm²`,
+                Tensão: `${c.tensao}`,
+                Potência: `${c.potencia}`,
+                Corrente: `${c.corrente}`,
+                Disjuntor: `${c.disjuntor}`,
+                Seção: `${c.secao}`,
                 DR: c.dr,
             };
         });
